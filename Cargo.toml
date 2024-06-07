@@ -1,0 +1,11 @@
+[package]
+name = "pingpong"
+version = "0.1.0"
+authors = ["Marcel Wienöbst <m.wienoebst@uni-luebeck.de"]
+edition = "2021"
+
+[dependencies]
+bit-set   = "0.5.3"
+highs = "1.6.1"
+itertools = "0.12.1"
+rand = "0.8"
