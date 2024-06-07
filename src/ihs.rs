@@ -7,7 +7,6 @@ use bit_set::BitSet;
 use rand::Rng;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
-use std::time::Instant;
 use highs::RowProblem;
 
 /// Returns an ordering of the vertices such that the directed edges x -> y violating this ordering (x comes after y) form a *minimum* weight [feedback arc set] of the given graph 
@@ -26,8 +25,6 @@ use highs::RowProblem;
 /// [implicit hitting set]: https://link.springer.com/chapter/10.1007/978-3-642-13509-5_14
 /// [highs]: https://highs.dev/
 pub fn solve(scc: &SCC) -> Vec<usize> {  
-    let verbose = false; 
-    let start = Instant::now();
     let     n = scc.n; // number of nodes  
     let mut m = 0;       // number of arcs, arc ids are 0...m-1
     let mut rng = thread_rng();
@@ -60,10 +57,6 @@ pub fn solve(scc: &SCC) -> Vec<usize> {
         cycles.shuffle(&mut rng);
         cycles.truncate(init_cap);
     }
-    if verbose {
-        println!("#cols {}", weights.len());
-        println!("#rows init {}", cycles.len());
-    }
 
     // repeatedly find a feedback arc set (a hitting set on the cycles) and compute new (still not hit) cycles
     let mut fas;
@@ -74,15 +67,11 @@ pub fn solve(scc: &SCC) -> Vec<usize> {
 	// This (outer) loop is the main ILP loop. If it breaks, an optimal fas was found.
 	loop {
 	    // This (inner) loop finds hitting sets using an LP relaxation.
-	    // If it breaks, we have a hitting set for all cycles, but it is not necessarily optimal. // This print statement can be helpful for debugging.
-            // println!("#rows {}", cycles.len());
+	    // If it breaks, we have a hitting set for all cycles, but it is not necessarily optimal. 
             loop {
 		// Quick heuristic loop.
 		// This loop computes a hitting set using a simple max-degree heuristic.
 		// If it breaks, we have a hitting set for all cycles, but it is not necessarily optimal.
-                if verbose {
-                    println!("#rows heur {} elapsed {}", cycles.len(), start.elapsed().as_secs());
-                }
 		let fas = quickhs::hitting_set(&cycles, &weights);
                 let oldsz = cycles.len();
                 new_cycles(&scc.w, &scc.g, &fas, arcid).into_iter()
@@ -94,24 +83,9 @@ pub fn solve(scc: &SCC) -> Vec<usize> {
 	    }	  
 	    // This (inner) loop finds hitting sets using an LP relaxation.
 	    // If it breaks, we have a hitting set for all cycles, but it is not necessarily optimal.
-            if verbose {
-                println!("#rows lp {} elapsed {}", cycles.len(), start.elapsed().as_secs());
-            }
 	    (fas, sol) = hitting_set(&cycles, &weights, true);
 	    vals = sol.columns().to_vec(); 
             
-            if verbose {
-                let mut lb = 0.0;
-                let mut ub = 0.0;
-                for i in 0..vals.len() {
-                    lb += vals[i] * weights[i] as f64;
-                    if fas.contains(i) {
-                        ub += weights[i] as f64;
-                    }
-                }
-                println!("lb {} ub {} elapsed {}", lb, ub, start.elapsed().as_secs());
-            }
-
             let oldsz = cycles.len();
             new_cycles(&scc.w, &scc.g, &fas, arcid).into_iter()
                 .map(cycle2arcs)
@@ -155,9 +129,6 @@ pub fn solve(scc: &SCC) -> Vec<usize> {
             continue;
         }
         
-        if verbose { 
-            println!("start ilp solve {}", start.elapsed().as_secs());
-        }
         // else, solve the ILP
 	(fas, _) = hitting_set(&cycles, &weights, false);
         let oldsz = cycles.len();
