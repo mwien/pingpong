@@ -8,7 +8,7 @@ The tool was developed by *Max Bannach, Florian Chudigiewitsch, Kim-Manuel Klein
 
 The solver first reduces the problem to a directed weighted feedback arc set (FAS) instance as, e.g., described in [1]. This instance is then solved by an Implicit Hitting Set formulation as given in [2,3]. We refine this approach in multiple ways. Most notably, we make use of multiple heuristics to add hitting set constraints: heuristics for the hitting set problem to find a good solution for the current formulation and heuristics for FAS to find cycles, which are not hit and thus have to be added as constraints. Inspired by the interplay of these heuristics, we name our solver ``pingpong''.
 
-Correctness is guaranteed as the program will only terminate if an ILP solver finds an optimal solution for the hitting set instance, which is checked to eliminate all cycles in the FAS instance. 
+Correctness is guaranteed as the program will only terminate if an ILP solver finds an optimal solution for the hitting set instance that is checked to eliminate all cycles in the FAS instance. If this is not the case, then further constraints are added and the procedure repeats. 
 
 1. Alexander Dobler: *[A Note on the Complexity of One-Sided Crossing Minimization of Trees](https://arxiv.org/abs/2306.15339).* (Technical Report, 2023)
 2. Martin Grötschel, Michael Jünger, and Gerhard Reinelt: A cutting plane algorithm for the linear ordering problem. Operations Research 32 (1984).
