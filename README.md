@@ -10,7 +10,7 @@ The solver first reduces the problem to a directed weighted feedback arc set (FA
 
 Correctness is guaranteed as the program will only terminate if an ILP solver finds an optimal solution for the hitting set instance that is checked to eliminate all cycles in the FAS instance. If this is not the case, then further constraints are added and the procedure repeats. 
 
-Disclaimer: The run-time per instance ca vary between runs even on the same hardware as the procedure of adding constraints uses randomness. 
+Disclaimer: The run-time per instance can vary between runs even on the same hardware as the procedure of adding constraints uses randomness. 
 
 1. Alexander Dobler: *[A Note on the Complexity of One-Sided Crossing Minimization of Trees](https://arxiv.org/abs/2306.15339).* (Technical Report, 2023)
 2. Martin Grötschel, Michael Jünger, and Gerhard Reinelt: A cutting plane algorithm for the linear ordering problem. Operations Research 32 (1984).
