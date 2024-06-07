@@ -66,8 +66,6 @@ pub fn solve(scc: &SCC) -> Vec<usize> {
     loop {
 	// This (outer) loop is the main ILP loop. If it breaks, an optimal fas was found.
 	loop {
-	    // This (inner) loop finds hitting sets using an LP relaxation.
-	    // If it breaks, we have a hitting set for all cycles, but it is not necessarily optimal. 
             loop {
 		// Quick heuristic loop.
 		// This loop computes a hitting set using a simple max-degree heuristic.
