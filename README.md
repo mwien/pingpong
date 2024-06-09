@@ -1,5 +1,7 @@
 # pingpong
 
+[![DOI](https://zenodo.org/badge/811754936.svg)](https://zenodo.org/doi/10.5281/zenodo.11533178)
+
 This is a solver for the one-sided crossing minimization problem (OCM) as a submission to the PACE 2024 Exact Track. The input format and I/O behavior is as specified by the [PACE](https://pacechallenge.org/2024/).
 
 The tool was developed by *Max Bannach, Florian Chudigiewitsch, Kim-Manuel Klein* and *Marcel Wienöbst*.
